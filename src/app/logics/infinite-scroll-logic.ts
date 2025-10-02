@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
 
-//
+
 export const UseInfiniteScroll = (loadMore: (page: number) => void) => {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);

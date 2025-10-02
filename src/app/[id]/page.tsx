@@ -1,59 +1,71 @@
 "use client"
-import styles from './page.module.scss'
-import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
-import {search} from "@/app/logics/helper";
-import { UseInfiniteScroll } from '@/app/logics/infinite-scroll-logic'
-import {UnsplashPhoto} from "@/app/logics/type";
+import styles from './page.module.scss';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePhotoSearch } from "../logics/photoCashe";
+import { UseInfiniteScroll } from '@/app/logics/infinite-scroll-logic';
+import { PhotoPreview, UnsplashPhoto } from "@/app/logics/type";
+import Modal from "@/app/components/Modal/Modal";
 
 const SearchId = () => {
     const params = useParams();
-    const [searchData, setSearchData] = useState<UnsplashPhoto[]>([]); // ცარიელი მასივი
+    const { photos, loadPhotos, clearPhotos } = usePhotoSearch();
+    const [photoData, setPhotoData] = useState<PhotoPreview | null>(null);
 
 
-    const loadPhotos = async (page: number) => {
+    const scrollLogic = UseInfiniteScroll((page: number) => {
         if (!params.id) return;
-
-        const data = await search(params.id as string, page);
-        if (data.results) {
-            setSearchData(prev => page === 1 ? data.results : [...prev, ...data.results]);
-        }
-
-        // მნიშვნელოვანი: ჩატვირთვის დასრულება
-        scrollLogic.onLoadComplete();
-    };
-
-    const scrollLogic = UseInfiniteScroll(loadPhotos);
+        const query = Array.isArray(params.id) ? params.id[0] : params.id;
+        loadPhotos(query, page, () => scrollLogic.onLoadComplete());
+    });
 
     useEffect(() => {
-        loadPhotos(1);
+        clearPhotos();
+        if (params.id) {
+            const query = Array.isArray(params.id) ? params.id[0] : params.id;
+            loadPhotos(query, 1, () => scrollLogic.onLoadComplete());
+        }
     }, [params.id]);
 
-    const columns = [0, 1, 2].map(col =>
-        searchData.filter((_, i) => i % 3 === col)
-    );
+    const onClickImg = (photo: UnsplashPhoto) => {
+        setPhotoData({
+            id: photo.id,
+            url: photo.urls.regular,
+            alt: photo.alt_description || null,
+            user: {
+                first_name: photo.user.first_name,
+                last_name: photo.user.last_name,
+                profile_image: photo.user.profile_image.large,
+                username: photo.user.username,
+            }
+        });
+    };
 
-    console.log(searchData);
+    // 3-Column Layout
+    const columns = [0, 1, 2].map(col =>
+        photos.filter((_, index) => index % 3 === col)
+    );
 
     return (
         <div className={styles.row}>
+            {photoData && <Modal onClose={() => setPhotoData(null)} photo={photoData} />}
             {columns.map((col, i) => (
                 <div key={i} className={styles.column}>
                     {col.map((photo, index) => (
                         <img
                             key={`${photo.id}-${i}-${index}`}
+                            onClick={() => onClickImg(photo)}
                             src={photo.urls.regular}
                             alt={photo.alt_description || "Unsplash Photo"}
-                            width={'416px'}
+                            width={'416'}
                             height={'auto'}
                             className={styles.photo}
-
                         />
                     ))}
                 </div>
             ))}
         </div>
-    )
-}
+    );
+};
 
 export default SearchId;

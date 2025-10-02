@@ -3,6 +3,7 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import Menu from "@/app/components/Menu/Menu";
 import SearchBar from "@/app/components/Searchbar/Searchbar";
+import ChildrenWrapper from "@/app/components/childrenWrapper/childrenWrapper";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -44,9 +45,9 @@ export default function RootLayout({
         </head>
 
         <body>
-        <Menu/>
-        <SearchBar/>
-        {children}
+        <ChildrenWrapper>
+            {children}
+        </ChildrenWrapper>
         </body>
         </html>
 

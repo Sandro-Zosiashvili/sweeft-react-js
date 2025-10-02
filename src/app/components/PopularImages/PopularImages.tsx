@@ -2,54 +2,65 @@
 import {useEffect, useState} from "react";
 import styles from "./PopularImages.module.scss";
 import {getPopularPhotos} from "@/app/logics/helper";
-import {UnsplashPhoto} from "../../logics/type"
+import {PhotoPreview, UnsplashPhoto} from "../../logics/type"
+import Modal from "@/app/components/Modal/Modal";
+import {UseInfiniteScroll} from "@/app/logics/infinite-scroll-logic";
 
 const PopularImages = () => {
     const [photos, setPhotos] = useState<UnsplashPhoto[]>([]);
-    const [active, setActive] = useState<boolean>(false);
+    const [photoData, setPhotoData] = useState<PhotoPreview | null>(null);
+
+    const scrollLogic = UseInfiniteScroll((page: number) => {
+        loadPhotos(page);
+    });
+
+    const loadPhotos = async (page: number) => {
+        const photosData = await getPopularPhotos(page);
+        setPhotos(prev => page === 1 ? photosData : [...prev, ...photosData]);
+        scrollLogic.onLoadComplete();
+    };
 
     useEffect(() => {
-        const loadPhotos = async () => {
-            const photosData = await getPopularPhotos();
-            setPhotos(photosData);
-        };
-        loadPhotos();
+        loadPhotos(1);
     }, []);
 
-    const onClickImg = () => {
-        setActive(true);
-
+    const onClickImg = (data: UnsplashPhoto) => {
+        const preview: PhotoPreview = {
+            id: data.id,
+            url: data.urls.regular,
+            alt: data.alt_description || null,
+            user: {
+                first_name: data.user.first_name,
+                last_name: data.user.last_name,
+                profile_image: data.user.profile_image.large,
+                username: data.user.username,
+            }
+        };
+        setPhotoData(preview);
     }
 
-    // ფოტოებს სამ სვეტად ვანაწილებ გრიდისთვის
     const columns = [0, 1, 2].map(col =>
         photos.filter((_, i) => i % 3 === col)
     );
+
     return (
         <div className={styles.row}>
-            {
-                active &&
-                <div className={styles.popup}>
-                    fdcsxa
-                </div>
-            }
+            {photoData && <Modal onClose={() => setPhotoData(null)} photo={photoData} />}
             {columns.map((col, i) => (
                 <div key={i} className={styles.column}>
-                    {col.map((photo) => (
+                    {col.map((photo, index) => (
                         <img
-                            key={photo.id}
-                            onClick={() => console.log(photo, "=>>>>>>")}
+                            key={`${photo.id}-${i}-${index}`}
+                            onClick={() => onClickImg(photo)}
                             src={photo.urls.regular}
                             alt={photo.alt_description || "Unsplash Photo"}
                             width={'416'}
                             height={'auto'}
                             className={styles.photo}
                         />
-
                     ))}
                 </div>
             ))}
-
         </div>
     );
 };
