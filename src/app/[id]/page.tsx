@@ -1,15 +1,16 @@
 "use client"
 import styles from './page.module.scss';
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { usePhotoSearch } from "../logics/photoCashe";
-import { UseInfiniteScroll } from '@/app/logics/infinite-scroll-logic';
-import { PhotoPreview, UnsplashPhoto } from "@/app/logics/type";
+import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
+import {usePhotoSearch} from "../logics/photoCashe";
+import {UseInfiniteScroll} from '@/app/logics/infinite-scroll-logic';
+import {PhotoPreview, UnsplashPhoto} from "@/app/logics/type";
 import Modal from "@/app/components/Modal/Modal";
+import SearchBar from "@/app/components/Searchbar/Searchbar";
 
 const SearchId = () => {
     const params = useParams();
-    const { photos, loadPhotos, clearPhotos } = usePhotoSearch();
+    const {photos, loadPhotos, clearPhotos} = usePhotoSearch();
     const [photoData, setPhotoData] = useState<PhotoPreview | null>(null);
 
 
@@ -48,7 +49,7 @@ const SearchId = () => {
 
     return (
         <div className={styles.row}>
-            {photoData && <Modal onClose={() => setPhotoData(null)} photo={photoData} />}
+            {photoData && <Modal onClose={() => setPhotoData(null)} photo={photoData}/>}
             {columns.map((col, i) => (
                 <div key={i} className={styles.column}>
                     {col.map((photo, index) => (
@@ -65,6 +66,7 @@ const SearchId = () => {
                 </div>
             ))}
         </div>
+
     );
 };
 

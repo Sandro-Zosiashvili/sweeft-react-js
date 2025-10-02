@@ -3,6 +3,7 @@ import styles from './SearchBar.module.scss'
 import Image from 'next/image'
 import {useEffect, useState} from "react";
 import {usePathname, useRouter} from "next/navigation";
+import {useSearchHistory} from "@/app/logics/historyLogic";
 
 const SearchBar = () => {
     const router = useRouter();
@@ -12,7 +13,7 @@ const SearchBar = () => {
     // შესაბამისად რეფრეშზეც დასერჩილი სიტყვა არ იშლება
     const initialValue = pathname === "/" ? "" : pathname.slice(1);
     const [inputValue, setInputValue] = useState<string>(initialValue);
-
+    useSearchHistory(inputValue);
 
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);

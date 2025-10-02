@@ -2,7 +2,8 @@
 
 import styles from './Menuitem.module.scss'
 import {useRouter} from 'next/navigation';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {usePathname} from "next/navigation";
 
 
 type MenuitemType = {
@@ -14,7 +15,14 @@ type MenuitemType = {
 
 const MenuItem = () => {
     const router = useRouter()
+    const path = usePathname()
     const [active, setActive] = useState<number>(0);
+
+    useEffect(() => {
+        if ("/historyHjE" !== path) {
+            setActive(0)
+        }
+    },[path])
 
     const data = [
         {
@@ -26,7 +34,7 @@ const MenuItem = () => {
         {
             id: 2,
             title: 'History',
-            path: './history',
+            path: './history-page',
         }
 
     ]
