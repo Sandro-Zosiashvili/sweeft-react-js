@@ -1,0 +1,40 @@
+
+.container {
+  display: flex;
+  gap: 20px;
+  font-weight: 500;
+  width: 300px;
+}
+
+.menuItem {
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  padding: 5px 12px;
+  font-size: 22px;
+  position: relative;
+  will-change: transform;
+  border-bottom: 1.5px solid transparent;
+  font-family: "Playwrite IT Moderna", cursive;
+
+}
+
+.menuItem:hover {
+  transform: translateY(-3px);
+  border-bottom-color: black;
+}
+
+.active {
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  padding: 5px 12px;
+  font-size: 22px;
+  position: relative;
+  will-change: transform;
+  border-bottom: 1px solid transparent;
+  border-bottom-color: black;
+  transform: translateY(-3px);
+  font-family: "Playwrite IT Moderna", cursive;
+
+
+
+}
