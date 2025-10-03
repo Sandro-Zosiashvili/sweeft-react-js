@@ -2,6 +2,8 @@ export interface UnsplashPhoto {
     id: string;
     urls: { regular: string };
     alt_description: string | null;
+    width: string | null;
+    height: string | null;
     user: {
         first_name: string;
         last_name: string;

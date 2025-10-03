@@ -1,17 +1,15 @@
 import {useEffect, useState} from "react";
 
-
-
 export const UseInfiniteScroll = (loadMore: (page: number) => void) => {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const checkScroll = () => {
-            // თუ უკვე იტვირთება, არაფერს ვაკეთებ
+            // Do nothing if content is already loading
             if (isLoading) return;
 
-            // ბოლოდან 500px-ით ადრე ვამოწმებ რომ მოვფეჩო
+            // Trigger loading when near the bottom (500px before)
             const nearBottom = window.innerHeight + window.scrollY >=
                 document.body.offsetHeight - 500;
 
@@ -19,11 +17,12 @@ export const UseInfiniteScroll = (loadMore: (page: number) => void) => {
                 setIsLoading(true);
                 const nextPage = page + 1;
                 setPage(nextPage);
-                // ფოტოების ჩატვირთვა
+                // Load more photos
                 loadMore(nextPage);
             }
         };
-        // ყოველ 100ms-ში ერთხელ ვამოწმებ
+
+        // Check scroll position every 100ms
         const throttledCheck = () => {
             setTimeout(checkScroll, 100);
         };
@@ -32,7 +31,7 @@ export const UseInfiniteScroll = (loadMore: (page: number) => void) => {
         return () => window.removeEventListener('scroll', throttledCheck);
     }, [page, loadMore, isLoading]);
 
-    // ფოტოების ჩატვირთვის დასრულების შემდეგ
+    // Called when photo loading is finished
     const handleLoadComplete = () => {
         setIsLoading(false);
     };

@@ -5,15 +5,15 @@ import { UnsplashPhoto } from "@/app/logics/type";
 
 const cache = new Map<string, UnsplashPhoto[]>();
 
-export const usePhotoSearch = () => {
+export const photoCache = () => {
     const [photos, setPhotos] = useState<UnsplashPhoto[]>([]);
 
     const loadPhotos = useCallback(async (query: string, page: number, onLoadComplete: () => void) => {
         const cacheKey = `${query}-${page}`;
 
-        // ქეშიდან წამოღება
+        // Load from cache if available
         if (cache.has(cacheKey)) {
-            console.log("ქეშიდან მოდიიიის", cacheKey);
+            console.log("Loaded from cache:", cacheKey);
 
             const cachedPhotos = cache.get(cacheKey)!;
             setPhotos(prev => page === 1 ? cachedPhotos : [...prev, ...cachedPhotos]);
@@ -21,12 +21,12 @@ export const usePhotoSearch = () => {
             return;
         }
 
-        // API-დან წამოღება
+        // Fetch from API if not cached
         const data = await search(query, page);
         if (data.results) {
-            console.log("API-დან წამოიღო და ჩაიწერა ქეშშიიიიი", cacheKey);
+            console.log("Fetched from API and cached:", cacheKey);
 
-            // ქეშში შენახვა
+            // Save to cache
             cache.set(cacheKey, data.results);
 
             setPhotos(prev => page === 1 ? data.results : [...prev, ...data.results]);
@@ -35,6 +35,7 @@ export const usePhotoSearch = () => {
         onLoadComplete();
     }, []);
 
+    // Clears all loaded photos
     const clearPhotos = useCallback(() => {
         setPhotos([]);
     }, []);

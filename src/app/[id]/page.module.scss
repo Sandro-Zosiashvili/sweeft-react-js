@@ -29,3 +29,29 @@
 }
 
 
+@media (max-width: 750px) {
+  .row {
+    padding: unset;
+  }
+  .column {
+    max-width: 35%;
+    padding: 0 3px;
+  }
+  .column img {
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .column {
+    flex: 100%;
+    max-width: 100%;
+    padding: 0 3px;
+  }
+  .column img {
+    margin-top: 10px;
+  }
+}
+
+
+

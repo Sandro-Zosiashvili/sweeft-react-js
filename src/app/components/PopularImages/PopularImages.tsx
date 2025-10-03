@@ -5,19 +5,20 @@ import {getPopularPhotos} from "@/app/logics/helper";
 import {PhotoPreview, UnsplashPhoto} from "../../logics/type"
 import Modal from "@/app/components/Modal/Modal";
 import {UseInfiniteScroll} from "@/app/logics/infinite-scroll-logic";
+import {createBalancedColumns} from "@/app/logics/balancedColumns";
 
 const PopularImages = () => {
     const [photos, setPhotos] = useState<UnsplashPhoto[]>([]);
     const [photoData, setPhotoData] = useState<PhotoPreview | null>(null);
 
-    const scrollLogic = UseInfiniteScroll((page: number) => {
-        loadPhotos(page);
-    });
+    // const scrollLogic = UseInfiniteScroll((page: number) => {
+    //     loadPhotos(page);
+    // });
 
     const loadPhotos = async (page: number) => {
         const photosData = await getPopularPhotos(page);
         setPhotos(prev => page === 1 ? photosData : [...prev, ...photosData]);
-        scrollLogic.onLoadComplete();
+        // scrollLogic.onLoadComplete();
     };
 
     useEffect(() => {
@@ -39,9 +40,11 @@ const PopularImages = () => {
         setPhotoData(preview);
     }
 
-    const columns = [0, 1, 2].map(col =>
-        photos.filter((_, i) => i % 3 === col)
-    );
+    // const columns = [0, 2, 1].map(col =>
+    //     photos.filter((_, i) => i % 3 === col)
+    // );
+
+    const columns = createBalancedColumns(photos, 3);
 
     return (
         <div className={styles.row}>
@@ -56,7 +59,9 @@ const PopularImages = () => {
                             alt={photo.alt_description || "Unsplash Photo"}
                             width={'416'}
                             height={'auto'}
+
                             className={styles.photo}
+
                         />
                     ))}
                 </div>

@@ -7,10 +7,9 @@ import {useSearchHistory} from "@/app/logics/historyLogic";
 
 const SearchBar = () => {
     const router = useRouter();
-    const pathname = usePathname(); // მაგ: "/cats"
+    const pathname = usePathname();
 
-    // path-იდან ვიღებ სერჩის სიტყვას რეფრეშზე რომ არ დაიკარგოს,
-    // შესაბამისად რეფრეშზეც დასერჩილი სიტყვა არ იშლება
+    // Gets the search term from the URL so it persists after refresh
     const initialValue = pathname === "/" ? "" : pathname.slice(1);
     const [inputValue, setInputValue] = useState<string>(initialValue);
     useSearchHistory(inputValue);
@@ -22,9 +21,9 @@ const SearchBar = () => {
 
     useEffect(() => {
         if (inputValue.trim() === "") {
-            router.push("/")   // მთავარ გვერდზე აბრუნებს როცა ცარიელია
+            router.push("/")   // Redirects to the main page when the input is empty
         } else {
-            router.push(`/${inputValue}`)  // ეგრევე უშვებს request-ს
+            router.push(`/${inputValue}`)  // Immediately sends the request
         }
     }, [inputValue, router])
 
@@ -40,7 +39,6 @@ const SearchBar = () => {
                     className={styles.search} type='text'
                     placeholder='Search'
                 />
-
             </div>
 
         </div>

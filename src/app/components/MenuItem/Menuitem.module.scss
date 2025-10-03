@@ -35,6 +35,30 @@
   transform: translateY(-3px);
   font-family: "Playwrite IT Moderna", cursive;
 
+}
 
+@media (max-width: 750px) {
+  .container {
+    width: unset;
+  }
+  .menuItem {
+    font-size: 18px;
+  }
+  .active {
+    font-size: 18px;
+  }
+}
 
+@media (max-width: 350px) {
+  .container {
+    width: unset;
+    gap: 10px;
+  }
+  .menuItem {
+    font-size: 16px;
+  }
+
+  .active {
+    font-size: 16px;
+  }
 }

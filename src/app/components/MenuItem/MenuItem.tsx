@@ -19,7 +19,7 @@ const MenuItem = () => {
     const [active, setActive] = useState<number>(0);
 
     useEffect(() => {
-        if ("/historyHjE" !== path) {
+        if ("/history-page" !== path) {
             setActive(0)
         }
     },[path])
