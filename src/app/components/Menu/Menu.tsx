@@ -13,7 +13,7 @@ const Menu = () => {
     return (
         <div className={styles.container}>
 
-            <div onClick={() => router.push('./')} className={styles.logoWrapper}>
+            <div onClick={() => router.push('/')} className={styles.logoWrapper}>
                 <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/camera--v2.png" alt="camera--v2"/>
                 <h1 className={styles.headername}>
                     Photofy

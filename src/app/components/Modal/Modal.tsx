@@ -13,7 +13,6 @@ interface ModalProps {
 
 const Modal = ({photo, onClose}: ModalProps) => {
     const [stats, setStats] = useState<PhotoStats | null>(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Scroll lock
@@ -29,20 +28,16 @@ const Modal = ({photo, onClose}: ModalProps) => {
             document.body.classList.remove('modal-open');
             window.scrollTo(0, scrollY);
         };
-    }, []); // dependency array ცარიელია, მხოლოდ mount/unmount
+    }, []);
 
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                setLoading(true);
                 const statsData = await getPhotoById(photo.id);
                 setStats(statsData);
-                console.log(statsData, '=====>>>>')
             } catch (error) {
                 console.error('Error fetching stats:', error);
-            } finally {
-                setLoading(false);
             }
         };
 

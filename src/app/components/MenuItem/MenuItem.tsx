@@ -19,10 +19,9 @@ const MenuItem = () => {
     const [active, setActive] = useState<number>(0);
 
     useEffect(() => {
-        if ("/history-page" !== path) {
-            setActive(0)
-        }
-    },[path])
+        if(path !== '/') setActive(1)
+    }, [path]);
+
 
     const data = [
         {
@@ -34,7 +33,7 @@ const MenuItem = () => {
         {
             id: 2,
             title: 'History',
-            path: './history-page',
+            path: '/history-page/.',
         }
 
     ]

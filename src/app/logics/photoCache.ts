@@ -13,7 +13,7 @@ export const photoCache = () => {
 
         // Load from cache if available
         if (cache.has(cacheKey)) {
-            console.log("Loaded from cache:", cacheKey);
+            console.log("Loaded from cache:", cacheKey); // ამ ლოგებს დაგიტოვებთ კონსოლში რომ მარტივად ნახოთ <3
 
             const cachedPhotos = cache.get(cacheKey)!;
             setPhotos(prev => page === 1 ? cachedPhotos : [...prev, ...cachedPhotos]);
@@ -24,7 +24,7 @@ export const photoCache = () => {
         // Fetch from API if not cached
         const data = await search(query, page);
         if (data.results) {
-            console.log("Fetched from API and cached:", cacheKey);
+            console.log("Fetched from API and cached:", cacheKey); // ამ ლოგებს დაგიტოვებთ კონსოლში რომ მარტივად ნახოთ <3
 
             // Save to cache
             cache.set(cacheKey, data.results);

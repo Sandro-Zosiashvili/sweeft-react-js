@@ -2,6 +2,7 @@
 import styles from './page.module.scss';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
+import SearchId from "@/app/[id]/page";
 
 const HistoryPage = () => {
     const [history, setHistory] = useState<string[]>([]);
@@ -22,7 +23,7 @@ const HistoryPage = () => {
                 {
                     history.map((word, i) => (
                         <div className={styles.searchedWord} key={i}
-                             onClick={() => router.push(`/${word}`)}>
+                             onClick={() => router.push(`/history-page/${word}`)}>
                             {word}
                         </div>
 
